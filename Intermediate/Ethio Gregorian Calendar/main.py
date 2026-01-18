@@ -1,4 +1,4 @@
-
+import sys
 import calendar
 from datetime import date, timedelta, datetime
 months = {
@@ -19,14 +19,21 @@ months = {
 
 def main():
     while True:
+        print("---------------------------------------------------------------------------------------------------")
         try:
             year = int(input("Enter a year(Julian or Gregorian): "))
 
             print("Gregorian Year:", year , end = "          " )
             et_year = year - 8
-            print("Ethiopian Years:", et_year, "-", et_year+1)
-
-            print_calander(year)
+            if et_year > 0:
+                print("Ethiopian Years:", et_year, "-", et_year+1)
+                print_calander(year)
+            elif et_year ==-1  and et_year+1 == 0:
+                print("Ethiopian Years:", et_year, "BC","-", et_year+1, "BC" )
+                print_calander(year)
+            else:
+                print("There is Ethiopian Calandar")
+                continue
             again = input("Do you want to continue?(y/n) ").lower()
             if again == "y":
                 continue
@@ -36,6 +43,7 @@ def main():
                 raise ValueError()
         except ValueError:
             print("Invalid input")
+            continue
     
 # def calender(year):
     
@@ -45,6 +53,8 @@ def converter(g_date):
         eth_year = g_date.year - 7
     else:
         eth_year = g_date.year - 8
+
+
 
     new_year = date(g_date.year, 9, 11)
     if g_date.year % 4 == 3:
@@ -70,7 +80,10 @@ def print_calander(year):
 
     for month in range(1, 13):
         print("\n", calendar.month_name[month], months[month])
-        print("Su Mo Tu We Th Fr Sa")
+
+        print("|-----------------------------------------|")
+        print("| Sun | Mon | Tue | Wed | Thu | Fri | Sat |")
+        print("|-----------------------------------------|")
 
         weeks = cal.monthdayscalendar(year, month)
 
@@ -78,33 +91,21 @@ def print_calander(year):
         for week in weeks:
             for day in week:
                 if day == 0:
-                    print("   ", end="")
+                    print("|     ", end="")
                 else:
-                    print(f"{day:2d} ", end="")
-            print()
+                    print(f"|  {day:2d} ", end="")
+            print("|")
 
             # Print Ethiopian days
             for day in week:
                 if day == 0:
-                    print("   ", end="")
+                    print("|     ", end="")
                 else:
                     eth_day = converter(date(year, month, day))
-                    print(f"{eth_day:2d} ", end="")
-            print()
-
+                    print(f"|  {eth_day:2d} ", end="")
+            print("|")
+            print("|-----------------------------------------|")
 if __name__ == "__main__":
     main()
 
 
-# from datetime import date
-
-# # Example date: January 17, 2026
-# g_date = date(2026, 1, 17)
-
-# # Get the weekday number (Monday=0, Sunday=6)
-# weekday_number = g_date.weekday()
-# print("Weekday number:", weekday_number)
-
-# # Get the full day name
-# day_name = g_date.strftime("%A")
-# print("Day name:", day_name)
